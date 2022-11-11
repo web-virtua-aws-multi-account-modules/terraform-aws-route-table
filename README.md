@@ -48,16 +48,16 @@ provider "aws" {
 ## Usage exemples
 
 ### Route table configured with IPV4 and IPV6
-* OBS: When using IPV6, the VPC must also have IPV6 enabled
+* OBS: When using IPV6, the VPC must also have IPV6 enabled and egress_only_internet_gatewa_id must be set
 
 ```hcl
 module "route_table_test" {
-  source        = "web-virtua-aws-multi-account-modules/route-table/aws"
-  name          = "tf-route-table-test"
-  has_ipv6      = true
-  vpc_id        = "vpc-047c3...3d4e"
-  gateway_id    = "igw-07b6ad...f0d"
-  subnet_ids    = ["subnet-0097...0538"]
+  source                         = "web-virtua-aws-multi-account-modules/route-table/aws"
+  name                           = "tf-route-table-test"
+  vpc_id                         = "vpc-047c3...3d4e"
+  gateway_id                     = "igw-07b6a...fh0d"
+  egress_only_internet_gatewa_id = "eigw-0b03...fba6"
+  subnet_ids                     = ["subnet-0097...0538"]
  
   providers = {
     aws = aws.alias_profile_b
@@ -88,7 +88,7 @@ module "route_table_test" {
 | name | `string` | `-` | yes | Name to route table | `-` |
 | vpc_id | `string` | `-` | yes | VPC ID | `-` |
 | gateway_id | `string` | `-` | yes | Internet or Nat gateway ID | `-` |
-| has_ipv6 | `bool` | `false` | no | If VPC has IPV6 | `*`false <br> `*`true |
+| egress_only_internet_gatewa_id | `string` | `null` | no | If VPC has IPV6 set egress only internet gatewa ID | `-` |
 | cidr_block_route_table | `string` | `0.0.0.0/0` | no | IPV4 cidr block to route table | `-` |
 | cidr_block_ipv6_route_table | `string` | `::/0` | no | IPV6 cidr block to route table | `-` |
 | subnet_ids | `list(string)` | `[]` | no | List within subnet IDs | `-` |
@@ -102,7 +102,6 @@ module "route_table_test" {
 |------|------|
 | [aws_route_table.create_route_table](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table) | resource |
 | [aws_route_table_association.create_associate_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route_table_association) | resource |
-| [aws_egress_only_internet_gateway.create_egress_only_internet_gateway](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/egress_only_internet_gateway) | resource |
 
 ## Outputs
 
@@ -110,4 +109,3 @@ module "route_table_test" {
 |------|-------------|
 | `route_table` | All informations of the route table |
 | `route_table_association` | All informations of route table association |
-| `egress_only_internet_gateway` | All informations of the egress only internet gateway|
